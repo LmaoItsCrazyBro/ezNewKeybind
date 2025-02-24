@@ -1,34 +1,33 @@
-print("Whitelisted!")
 if not getgenv().MTXClient_Settings then
-    getgenv().MTXClient_Settings = {
-        ["Aim"] = {["AimPart"] = "Head", ["AimlockKey"] = "c", ["AimRadius"] = 35, ["LookAt"] = true},
-        ["Fov"] = {
-            ["Enabled"] = true,
-            ["Fov_Radius"] = 35,
-            ["insidefov_Visible"] = true,
-            ["insidefov_Color"] = Color3.fromRGB(105, 0, 255),
-            ["insidefov_transparency"] = 0.3,
-            ["outsidefov_Visible"] = true,
-            ["outsidefov_Color"] = Color3.fromRGB(105, 0, 255),
-            ["outsidefov_transparency"] = 1
-        },
-        ["ClientFly"] = {["Enabled"] = false, ["Keybind"] = Enum.KeyCode.X, ["Speed"] = 25},
-        ["Speed"] = {["Enabled"] = false, ["Keybind"] = Enum.KeyCode.Z, ["amount"] = 20},
-        ["Verifications"] = {
-            ["ThirdPerson"] = true,
-            ["FirstPerson"] = true,
-            ["TeamCheck"] = false,
-            ["K_O"] = true,
-            ["Grabing"] = true
-        },
-        ["Utility"] = {["NoSlow"] = true, ["AntiGroundShots"] = true, ["Notifications"] = true},
-        ["Predict"] = {
-            ["PredictMovement"] = false,
-            ["PredictionVelocity"] = 7,
-            ["AirPrediction"] = false,
-            ["AirPredictionValue"] = 0.14500
-        }
-    }
+   getgenv().MTXClient_Settings = {
+      ["Aim"] = {["AimPart"] = "Head", ["AimlockKey"] = "c", ["AimRadius"] = 35, ["LookAt"] = true},
+      ["Fov"] = {
+         ["Enabled"] = true,
+         ["Fov_Radius"] = 70,
+         ["insidefov_Visible"] = true,
+         ["insidefov_Color"] = Color3.fromRGB(105, 0, 255),
+         ["insidefov_transparency"] = 0.3,
+         ["outsidefov_Visible"] = true,
+         ["outsidefov_Color"] = Color3.fromRGB(105, 0, 255),
+         ["outsidefov_transparency"] = 1
+      },
+      ["ClientFly"] = {["Enabled"] = false, ["Keybind"] = Enum.KeyCode.X, ["Speed"] = 25},
+      ["Speed"] = {["Enabled"] = false, ["Keybind"] = Enum.KeyCode.Z, ["amount"] = 20},
+      ["Verifications"] = {
+         ["ThirdPerson"] = true,
+         ["FirstPerson"] = true,
+         ["TeamCheck"] = false,
+         ["K_O"] = true,
+         ["Grabing"] = true
+      },
+      ["Utility"] = {["NoSlow"] = true, ["AntiGroundShots"] = true, ["Notifications"] = true},
+      ["Predict"] = {
+         ["PredictMovement"] = false,
+         ["PredictionVelocity"] = 7,
+         ["AirPrediction"] = false,
+         ["AirPredictionValue"] = 0.14500
+      }
+   }
 end
 local a = getgenv().MTXClient_Settings
 getgenv().AimPart = a.Aim.AimPart
@@ -219,8 +218,8 @@ local K = function(L)
                      function()
                         for a8, a9 in ipairs(u) do
                            if a9 == P then
-                                 table.remove(u, a8)
-                                 break
+                              table.remove(u, a8)
+                              break
                            end
                         end
                         P:Destroy()
@@ -383,25 +382,29 @@ d.RenderStepped:Connect(
         end
     end
 )
-aa.new_connection(
-   c.InputBegan,
-   function(aA)
-      if aA.KeyCode == a.ClientFly.Keybind then
-         a.ClientFly.Enabled = not a.ClientFly.Enabled
-         local aF = not (not (a.ClientFly and a.ClientFly.Enabled))
-         K({Title = "Notification", Description = "Client Fly : " .. tostring(aF), Duration = 1})
-      elseif aA.KeyCode == Enum.KeyCode.V then
-         for a8 = 1, 5 do
-            f.MainEvent:FireServer("Stomp")
+if not f:FindFirstChild("MainEvent") then
+   aa.new_connection(
+      c.InputBegan,
+      function(aA)
+         if aA.KeyCode == a.ClientFly.Keybind then
+            a.ClientFly.Enabled = not a.ClientFly.Enabled
+            local aF = not (not (a.ClientFly and a.ClientFly.Enabled))
+            K({Title = "Notification", Description = "Client Fly : " .. tostring(aF), Duration = 1})
+         elseif aA.KeyCode == Enum.KeyCode.V then
+            for a8 = 1, 5 do
+               f.MainEvent:FireServer("Stomp")
+            end
+            K({Title = "Notification", Description = "Stomping", Duration = 1})
+         elseif aA.KeyCode == a.Speed.Keybind then
+            a.Speed.Enabled = not a.Speed.Enabled
+            local aG = not (not (a.Speed and a.Speed.Enabled))
+            K({Title = "Notification", Description = "Speed : " .. tostring(aG), Duration = 1})
          end
-         K({Title = "Notification", Description = "Stomping", Duration = 1})
-      elseif aA.KeyCode == a.Speed.Keybind then
-         a.Speed.Enabled = not a.Speed.Enabled
-         local aG = not (not (a.Speed and a.Speed.Enabled))
-         K({Title = "Notification", Description = "Speed : " .. tostring(aG), Duration = 1})
       end
-   end
-)
+   )
+else
+   warn("MainEvent not found in current game.")
+end
 aa.new_connection(
    d.Heartbeat,
    function(aH)
